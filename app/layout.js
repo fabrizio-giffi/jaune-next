@@ -13,7 +13,7 @@ export const quattrocento = Quattrocento({
   display: "swap",
 });
 
-export const metadata = {
+const metadata = {
   title: "Mona en Jaune",
   description: "Artist and animal lover",
 };

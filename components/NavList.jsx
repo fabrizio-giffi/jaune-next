@@ -5,13 +5,13 @@ function NavList({open}) {
   return (
     <ul className={open ? styles.menuOpen : styles.menuClosed}>
       <li>
-        <a href="">About</a>
+        <a href="/about">About</a>
       </li>
       <li>
-        <a href="">Art</a>
+        <a href="/art">Art</a>
       </li>
       <li>
-        <a href="">Contact</a>
+        <a href="/contact">Contact</a>
       </li>
     </ul>
   );

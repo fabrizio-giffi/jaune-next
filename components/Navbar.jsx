@@ -8,6 +8,7 @@ import { useState } from "react";
 import { quattrocento } from "@/app/layout";
 import NavList from "./NavList";
 import { useMediaPredicate } from "react-media-hook";
+import Link from "next/link";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -19,11 +20,13 @@ function Navbar() {
   };
 
   return (
-    <nav className={styles.navbar}>
+    <nav className="h-16 flex justify-between items-center bg-amber-200">
       {/* <div>
         <Image src="/logo.png" alt="Mona en Jaune" width={200} height={100} />
       </div> */}
-      <h3 className={[styles.navLogo, quattrocento.className].join(" ")}>Mona en Jaune</h3>
+      <Link href="/">
+        <h3 className={["m-10 font-normal", quattrocento.className].join(" ")}>Mona en Jaune</h3>
+      </Link>
       {mobile && (
         <div>
           <MenuIcon className={styles.hamburger} onClick={toggleBurger} />
@@ -32,17 +35,17 @@ function Navbar() {
       )}
 
       {!mobile && (
-        <div>
+        <div className="m-10">
           {console.log("not mobile anymore")}
-          <ul className="flex">
+          <ul className="flex gap-6">
             <li>
-              <a href="">About</a>
+              <a href="#">About</a>
             </li>
             <li>
-              <a href="">Art</a>
+              <a href="#">Art</a>
             </li>
             <li>
-              <a href="">Contact</a>
+              <a href="#">Contact</a>
             </li>
           </ul>
         </div>
