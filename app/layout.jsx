@@ -1,5 +1,6 @@
 import { Lora, Quattrocento } from "next/font/google";
 import "./global.css";
+import Navbar from "@/components/Navbar";
 
 export const lora = Lora({
   subsets: ["latin"],
@@ -21,7 +22,10 @@ const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={lora.className}>{children}</body>
+      <body className={lora.className}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

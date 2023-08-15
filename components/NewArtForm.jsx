@@ -3,17 +3,17 @@ import React, { useState } from "react";
 function NewArtForm() {
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
-  const [year, setYear] = useState(null);
+  const [year, setYear] = useState(0);
   const [description, setDescription] = useState("");
   const [technique, setTechnique] = useState("");
-  const [height, setHeight] = useState(null);
-  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
 
   const [formats, setFormats] = useState([]);
 
-  const [originalPrice, setOriginalPrice] = useState(null);
-  const [posterPrice, setPosterPrice] = useState(null);
-  const [postCardPrice, setPostCardPrice] = useState(null);
+  const [originalPrice, setOriginalPrice] = useState(0);
+  const [posterPrice, setPosterPrice] = useState(0);
+  const [postCardPrice, setPostCardPrice] = useState(0);
 
   const [apiResponse, setApiResponse] = useState({});
 
@@ -110,7 +110,7 @@ function NewArtForm() {
             onChange={(event) => setTechnique(event.target.value)}
             required
           >
-            <option selected={!technique} value="">
+            <option defaultValue="">
               Select the technique
             </option>
             <option value="acryl leinwand">Acryl Leinwand</option>

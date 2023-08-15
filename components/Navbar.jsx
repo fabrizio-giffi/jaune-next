@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import styles from "./Navbar.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { quattrocento } from "@/app/layout";
+import { quattrocento } from "@/app/layout.jsx";
 import NavList from "./NavList";
 import { useMediaPredicate } from "react-media-hook";
 import Link from "next/link";
@@ -36,16 +35,15 @@ function Navbar() {
 
       {!mobile && (
         <div className="m-10">
-          {console.log("not mobile anymore")}
           <ul className="flex gap-6">
             <li>
-              <a href="#">About</a>
+              <Link href="#">About</Link>
             </li>
             <li>
-              <a href="#">Art</a>
+              <Link href="/art">Art</Link>
             </li>
             <li>
-              <a href="#">Contact</a>
+              <Link href="#">Contact</Link>
             </li>
           </ul>
         </div>

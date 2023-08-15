@@ -1,17 +1,18 @@
 import React from "react";
 import styles from "./Navbar.module.css";
+import Link from "next/link";
 
 function NavList({open}) {
   return (
     <ul className={open ? styles.menuOpen : styles.menuClosed}>
       <li>
-        <a href="/about">About</a>
+        <Link href="#">About</Link>
       </li>
       <li>
-        <a href="/art">Art</a>
+        <Link href="/art">Art</Link>
       </li>
       <li>
-        <a href="/contact">Contact</a>
+        <Link href="#">Contact</Link>
       </li>
     </ul>
   );
