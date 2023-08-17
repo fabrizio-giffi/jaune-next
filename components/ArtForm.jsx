@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function NewArtForm() {
-  const [url, setUrl] = useState("");
-  const [name, setName] = useState("");
-  const [year, setYear] = useState(0);
-  const [description, setDescription] = useState("");
-  const [technique, setTechnique] = useState("");
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
+function ArtForm({ art }) {
+  const [url, setUrl] = useState(art.url || "");
+  const [name, setName] = useState(art.name || "");
+  const [year, setYear] = useState(art.year || 0);
+  const [description, setDescription] = useState(art.description || "");
+  const [technique, setTechnique] = useState(art.technique || "");
+  const [height, setHeight] = useState(art.size?.height || 0);
+  const [width, setWidth] = useState(art.size?.width || 0);
 
-  const [formats, setFormats] = useState([]);
+  const [sale, setSale] = useState(art.sale || []);
+  const [toggleFormats, setToggleFormats] = useState([]);
 
   const [originalPrice, setOriginalPrice] = useState(0);
   const [posterPrice, setPosterPrice] = useState(0);
@@ -17,23 +18,44 @@ function NewArtForm() {
 
   const [apiResponse, setApiResponse] = useState({});
 
-  const handleFormats = (format) => {
-    if (!formats.includes(format)) {
-      setFormats([...formats, format]);
+  const handleCheckbox = (format, event) => {
+    if (!toggleFormats.includes(format)) {
+      setToggleFormats([...toggleFormats, format]);
     } else {
-      let filteredFormats = formats.filter((item) => item !== format);
-      setFormats(filteredFormats);
+      const filteredFormats = toggleFormats.filter((item) => item !== format);
+      setToggleFormats(filteredFormats);
+    }
+    if (!event.target.checked) {
+      if (format === "original") setOriginalPrice(0);
+      if (format === "poster") setPosterPrice(0);
+      if (format === "postcard") setPostCardPrice(0);
     }
   };
 
+  const getPrices = () => {
+    sale.forEach((format) => {
+      if (format.format === "original") setOriginalPrice(format.price);
+      if (format.format === "poster") setPosterPrice(format.price);
+      if (format.format === "postcard") setPostCardPrice(format.price);
+    });
+  };
+
+  useEffect(() => {
+    getPrices();
+    let formats = [];
+    sale.forEach((format) => formats.push(format.format));
+    setToggleFormats(formats);
+  }, [sale]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let sale = [];
-    
-    formats.forEach((item) => {
-      item === "original" && sale.push({ format: item, price: originalPrice });
-      item === "poster" && sale.push({ format: item, price: posterPrice });
-      item === "postcard" && sale.push({ format: item, price: postCardPrice });
+
+    let saleList = [];
+
+    toggleFormats.forEach((item) => {
+      if (item === "original" && originalPrice !== 0) saleList.push({ format: "original", price: parseInt(originalPrice) });
+      if (item === "poster" && posterPrice !== 0) saleList.push({ format: "poster", price: parseInt(posterPrice) });
+      if (item === "postcard" && postCardPrice !== 0) saleList.push({ format: "postcard", price: parseInt(postCardPrice) });
     });
 
     const payload = {
@@ -43,17 +65,21 @@ function NewArtForm() {
       description,
       technique,
       size: { height, width },
-      sale,
+      sale: saleList,
     };
-    const response = await fetch("http://localhost:5005/api/create", {
-      method: "POST",
+
+    const apiUrl = art._id ? `http://localhost:5005/api/art/item/${art._id}` : "http://localhost:5005/api/create";
+    const apiMethod = art._id ? "PATCH" : "POST";
+
+    const response = await fetch(apiUrl, {
+      method: apiMethod,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
     const parsed = await response.json();
-    if (response.status === 201) {
+    if (response.status === 200 || response.status === 201) {
       setApiResponse({ status: "success", message: parsed.message });
     }
     if (response.status === 400) {
@@ -110,9 +136,7 @@ function NewArtForm() {
             onChange={(event) => setTechnique(event.target.value)}
             required
           >
-            <option defaultValue="">
-              Select the technique
-            </option>
+            <option defaultValue="">Select the technique</option>
             <option value="acryl leinwand">Acryl Leinwand</option>
             <option value="bleistift">Bleistift</option>
             <option value="federzeichnung mit tinte">Federzeichnung mit Tinte</option>
@@ -143,12 +167,16 @@ function NewArtForm() {
         <h4>Sale</h4>
         <label>
           Original
-          <input type="checkbox" onChange={() => handleFormats("original")} />
+          <input
+            type="checkbox"
+            checked={toggleFormats.includes("original")}
+            onChange={(event) => handleCheckbox("original", event)}
+          />
           <input
             className="border-2 rounded-sm"
             type="number"
             placeholder="Price for original"
-            disabled={!formats.includes("original")}
+            disabled={!toggleFormats.includes("original")}
             value={originalPrice}
             onChange={(event) => setOriginalPrice(event.target.value)}
           />
@@ -156,12 +184,16 @@ function NewArtForm() {
         <br />
         <label>
           Poster
-          <input type="checkbox" onChange={() => handleFormats("poster")} />
+          <input
+            type="checkbox"
+            checked={toggleFormats.includes("poster")}
+            onChange={(event) => handleCheckbox("poster", event)}
+          />
           <input
             className="border-2 rounded-sm"
             type="number"
             placeholder="Price for poster"
-            disabled={!formats.includes("poster")}
+            disabled={!toggleFormats.includes("poster")}
             value={posterPrice}
             onChange={(event) => setPosterPrice(event.target.value)}
           />
@@ -169,18 +201,22 @@ function NewArtForm() {
         <br />
         <label>
           Postcard
-          <input type="checkbox" onChange={() => handleFormats("postcard")} />
+          <input
+            type="checkbox"
+            checked={toggleFormats.includes("postcard")}
+            onChange={(event) => handleCheckbox("postcard", event)}
+          />
           <input
             className="border-2 rounded-sm"
             type="number"
             placeholder="Price for postcard"
-            disabled={!formats.includes("postcard")}
+            disabled={!toggleFormats.includes("postcard")}
             value={postCardPrice}
             onChange={(event) => setPostCardPrice(event.target.value)}
           />
         </label>
         <button className="border-2 bg-yellow-200 mt-4 px-2 py-1" type="submit" onClick={handleSubmit}>
-          Create new Item
+          {art._id ? "Edit Item" : "Create Item"}
         </button>
       </form>
       {apiResponse.status === "success" && <div>{apiResponse.message}</div>}
@@ -189,4 +225,4 @@ function NewArtForm() {
   );
 }
 
-export default NewArtForm;
+export default ArtForm;

@@ -1,8 +1,10 @@
 "use client";
 
 import { Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 function ArtList({ technique }) {
   const [artList, setArtList] = useState([]);
@@ -25,8 +27,13 @@ function ArtList({ technique }) {
       <ul>
         {artList.map((item) => {
           return (
-            <li key={item._id}>
-              <Image src={item.url} alt={item.id + "-" + item.name} width={300} height={200} />
+            <li className="relative" key={item._id}>
+              <Image src={item.url} alt={item._id + "-" + item.name} width={300} height={200} />
+              <button className="absolute top-0 p-1 bg-yellow-200 rounded-full">
+                <Link href={`/admin/edit/${item._id}`}>
+                  <EditIcon fontSize="small" />
+                </Link>
+              </button>
               <Typography variant="h4">{item.name}</Typography>
               <Typography variant="body1">{item.description}</Typography>
               <Typography variant="body1">{item.year}</Typography>
