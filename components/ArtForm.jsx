@@ -17,6 +17,7 @@ function ArtForm({ art }) {
   const [postCardPrice, setPostCardPrice] = useState(0);
 
   const [apiResponse, setApiResponse] = useState({});
+  const [showDelete, setShowDelete] = useState(false);
 
   const handleCheckbox = (format, event) => {
     if (!toggleFormats.includes(format)) {
@@ -86,9 +87,25 @@ function ArtForm({ art }) {
       setApiResponse({ status: "error", message: response.message });
     }
   };
+
+  const handleDelete = async (id, event) => {
+    event.preventDefault();
+
+    const response = await fetch(`http://localhost:5005/api/art/item/${id}`, {
+      method: "DELETE",
+    });
+    const parsed = response.json();
+    if (response.status === 200 || response.status === 201) {
+      setApiResponse({ status: "success", message: parsed.message });
+    }
+    if (response.status === 400) {
+      setApiResponse({ status: "error", message: response.message });
+    }
+  };
+
   return (
     <>
-      <form className="flex-col m-auto md:w-1/2" method="POST" action="http://localhost:5005/api/create">
+      <form className="flex-col m-auto md:w-1/2" method="" action="">
         <label>
           URL
           <input
@@ -218,6 +235,21 @@ function ArtForm({ art }) {
         <button className="border-2 bg-yellow-200 mt-4 px-2 py-1" type="submit" onClick={handleSubmit}>
           {art._id ? "Edit Item" : "Create Item"}
         </button>
+        {art._id && (
+          <button className="border-2 bg-yellow-200 mt-4 px-2 py-1" type="button" onClick={() => setShowDelete(true)}>
+            Delete Item
+          </button>
+        )}
+        {showDelete && (
+          <dialog>
+            <button type="button" onClick={() => setShowDelete(false)}>
+              Cancel
+            </button>
+            <button type="submit" onClick={(event) => handleDelete(art._id)}>
+              Cancel
+            </button>
+          </dialog>
+        )}
       </form>
       {apiResponse.status === "success" && <div>{apiResponse.message}</div>}
       {apiResponse.status === "error" && <div>{apiResponse.message}</div>}
