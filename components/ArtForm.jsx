@@ -41,6 +41,23 @@ function ArtForm({ art }) {
     });
   };
 
+  const uploadImage = async (event) => {
+    const formdata = new FormData();
+    formdata.append("url", event.target.files[0]);
+
+    const requestOptions = {
+      method: "POST",
+      body: formdata,
+    };
+    try {
+      const response = await fetch("http://localhost:5005/api/upload", requestOptions);
+      const parsed = await response.json();
+      setUrl(parsed.fileUrl);
+    } catch (error) {
+      console.error("Error while uploading the file: ", error);
+    }
+  };
+
   useEffect(() => {
     getPrices();
     let formats = [];
@@ -108,13 +125,7 @@ function ArtForm({ art }) {
       <form className="flex-col m-auto md:w-1/2" method="" action="">
         <label>
           URL
-          <input
-            className="border-2 rounded-sm w-full"
-            type="text"
-            value={url}
-            onChange={(event) => setUrl(event.target.value)}
-            required
-          />
+          <input className="border-2 rounded-sm w-full" type="file" onChange={(event) => uploadImage(event)} required />
         </label>
         <label>
           Name
@@ -154,10 +165,10 @@ function ArtForm({ art }) {
             required
           >
             <option defaultValue="">Select the technique</option>
-            <option value="acryl leinwand">Acryl Leinwand</option>
+            <option value="acryl-leinwand">Acryl Leinwand</option>
             <option value="bleistift">Bleistift</option>
-            <option value="federzeichnung mit tinte">Federzeichnung mit Tinte</option>
-            <option value="acryl holz">Acryl Holz</option>
+            <option value="federzeichnung-mit-tinte">Federzeichnung mit Tinte</option>
+            <option value="acryl-holz">Acryl Holz</option>
             <option value="buntstift">Buntstift</option>
           </select>
         </label>
