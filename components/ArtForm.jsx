@@ -1,3 +1,4 @@
+import { poppins } from "@/app/fonts";
 import React, { useEffect, useState } from "react";
 
 function ArtForm({ art }) {
@@ -18,6 +19,14 @@ function ArtForm({ art }) {
 
   const [apiResponse, setApiResponse] = useState({});
   const [showDelete, setShowDelete] = useState(false);
+
+  // *** Fetch the
+  useEffect(() => {
+    getPrices();
+    let formats = [];
+    sale.forEach((format) => formats.push(format.format));
+    setToggleFormats(formats);
+  }, [sale]);
 
   const handleCheckbox = (format, event) => {
     if (!toggleFormats.includes(format)) {
@@ -57,13 +66,6 @@ function ArtForm({ art }) {
       console.error("Error while uploading the file: ", error);
     }
   };
-
-  useEffect(() => {
-    getPrices();
-    let formats = [];
-    sale.forEach((format) => formats.push(format.format));
-    setToggleFormats(formats);
-  }, [sale]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -122,15 +124,15 @@ function ArtForm({ art }) {
 
   return (
     <>
-      <form className="flex-col m-auto md:w-1/2" method="" action="">
-        <label>
+      <form className="flex-col m-auto md:w-1/2 mt-6" method="" action="">
+        <label className="text-typo-600">
           URL
-          <input className="border-2 rounded-sm w-full" type="file" onChange={(event) => uploadImage(event)} required />
+          <input className="border-2 p-1 rounded-sm w-full" type="file" onChange={(event) => uploadImage(event)} required />
         </label>
         <label>
           Name
           <input
-            className="border-2 rounded-sm w-full "
+            className="border-2 p-1 rounded-sm w-full"
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -140,7 +142,7 @@ function ArtForm({ art }) {
         <label>
           Year
           <input
-            className="border-2 rounded-sm w-full "
+            className="border-2 p-1 rounded-sm w-full"
             type="text"
             value={year}
             onChange={(event) => setYear(event.target.value)}
@@ -149,7 +151,7 @@ function ArtForm({ art }) {
         <label>
           Description
           <input
-            className="border-2 rounded-sm w-full "
+            className="border-2 p-1 rounded-sm w-full"
             type="text"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
@@ -158,7 +160,7 @@ function ArtForm({ art }) {
         <label>
           Technique
           <select
-            className=" border-2 rounded-sm w-full "
+            className="border-2 p-1 rounded-sm w-full"
             type="text"
             value={technique}
             onChange={(event) => setTechnique(event.target.value)}
@@ -172,36 +174,42 @@ function ArtForm({ art }) {
             <option value="buntstift">Buntstift</option>
           </select>
         </label>
-        <label>
-          Height
+        <hr className="mt-4 mb-2" />
+        <h4>Size</h4>
+        <div className="grid grid-cols-11 gap-2 w-full items-center">
+          <label htmlFor="height">Height</label>
           <input
-            className="border-2 rounded-sm w-full"
+            id="height"
+            className="border-2 p-1 rounded-sm col-span-4"
             type="number"
             value={height}
             onChange={(event) => setHeight(event.target.value)}
             required
           />
-        </label>
-        <label>
-          Width
+          <span></span>
+          <label htmlFor="width">Width</label>
           <input
-            className="border-2 rounded-sm w-full"
+            id="width"
+            className="border-2 p-1 rounded-sm col-span-4"
             type="number"
             value={width}
             onChange={(event) => setWidth(event.target.value)}
             required
           />
-        </label>
+        </div>
+        <hr className="mt-4 mb-2" />
         <h4>Sale</h4>
-        <label>
-          Original
+        <label className="flex items-center gap-2 mb-1">
+          <div className="flex gap-2 items-center w-1/5">
+            <input
+              type="checkbox"
+              checked={toggleFormats.includes("original")}
+              onChange={(event) => handleCheckbox("original", event)}
+            />
+            Original
+          </div>
           <input
-            type="checkbox"
-            checked={toggleFormats.includes("original")}
-            onChange={(event) => handleCheckbox("original", event)}
-          />
-          <input
-            className="border-2 rounded-sm"
+            className="border-2 p-1 rounded-sm"
             type="number"
             placeholder="Price for original"
             disabled={!toggleFormats.includes("original")}
@@ -209,16 +217,17 @@ function ArtForm({ art }) {
             onChange={(event) => setOriginalPrice(event.target.value)}
           />
         </label>
-        <br />
-        <label>
-          Poster
+        <label className="flex gap-2 mb-1">
+          <div className="flex gap-2 items-center w-1/5">
+            <input
+              type="checkbox"
+              checked={toggleFormats.includes("poster")}
+              onChange={(event) => handleCheckbox("poster", event)}
+            />
+            Poster
+          </div>
           <input
-            type="checkbox"
-            checked={toggleFormats.includes("poster")}
-            onChange={(event) => handleCheckbox("poster", event)}
-          />
-          <input
-            className="border-2 rounded-sm"
+            className="border-2 p-1 rounded-sm"
             type="number"
             placeholder="Price for poster"
             disabled={!toggleFormats.includes("poster")}
@@ -226,16 +235,17 @@ function ArtForm({ art }) {
             onChange={(event) => setPosterPrice(event.target.value)}
           />
         </label>
-        <br />
-        <label>
-          Postcard
+        <label className="flex items-center gap-2">
+          <div className="flex gap-2 items-center w-1/5">
+            <input
+              type="checkbox"
+              checked={toggleFormats.includes("postcard")}
+              onChange={(event) => handleCheckbox("postcard", event)}
+            />
+            Postcard
+          </div>
           <input
-            type="checkbox"
-            checked={toggleFormats.includes("postcard")}
-            onChange={(event) => handleCheckbox("postcard", event)}
-          />
-          <input
-            className="border-2 rounded-sm"
+            className="border-2 p-1 rounded-sm"
             type="number"
             placeholder="Price for postcard"
             disabled={!toggleFormats.includes("postcard")}
@@ -243,11 +253,11 @@ function ArtForm({ art }) {
             onChange={(event) => setPostCardPrice(event.target.value)}
           />
         </label>
-        <button className="border-2 bg-yellow-200 mt-4 px-2 py-1" type="submit" onClick={handleSubmit}>
+        <button className="bg-green-300 text-sm text-typo-900 rounded-lg mt-4 mx-auto p-2" type="submit" onClick={handleSubmit}>
           {art._id ? "Edit Item" : "Create Item"}
         </button>
         {art._id && (
-          <button className="border-2 bg-yellow-200 mt-4 px-2 py-1" type="button" onClick={() => setShowDelete(true)}>
+          <button className="border-2 bg-red-300 rounded-lg mt-4 px-2 py-1" type="button" onClick={() => setShowDelete(true)}>
             Delete Item
           </button>
         )}

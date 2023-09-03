@@ -2,19 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --text-900: #212121;
-  --text-800: #424242;
-  --text-700: #616161;
-}
-
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Lora", serif;
   line-height: 1.6;
   font-size: 18px;
+  color: #212529;
 }
 
 * {
@@ -27,6 +21,15 @@ ul {
 }
 
 a {
-  color: var(--text-900);
   text-decoration: none;
+}
+
+label {
+  color: #6c757d;
+  font-size: 16px;
+}
+
+option,
+select {
+  background-color: white;
 }

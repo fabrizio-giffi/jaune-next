@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./Navbar.module.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { quattrocento } from "@/app/layout.jsx";
+import { quattrocento } from "@/app/fonts";
 import NavList from "./NavList";
 import { useMediaPredicate } from "react-media-hook";
 import Link from "next/link";
