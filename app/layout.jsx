@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={poppins.className}>
         <Navbar />
-        {children}
+        <div className="m-3 flex flex-col items-center">{children}</div>
       </body>
     </html>
   );

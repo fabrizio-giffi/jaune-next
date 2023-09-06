@@ -3,6 +3,7 @@
 import ArtForm from "@/components/ArtForm";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function EditArtForm() {
   const { id } = useParams();
@@ -23,13 +24,21 @@ function EditArtForm() {
   }, []);
 
   return (
-    <div>
+    <>
       {fetching && <h1>Loading</h1>}
+      <div className="flex items-end gap-4">
+        <button
+          className="flex items-center bg-typo-400 text-sm text-typo-900 rounded-lg mt-4 p-2 ml-2"
+          type="button"
+          onClick={() => router.back()}
+        >
+          <ArrowBackIcon className="mr-1" fontSize="small" />
+          Go back
+        </button>
+        <h1 className="text-3xl mt-3 text-center font-bold">Edit item</h1>
+      </div>
       {!fetching && <ArtForm art={art} />}
-      <button className="border-2 bg-slate-400 mt-4 px-2 py-1" type="button" onClick={() => router.back()}>
-        Go back
-      </button>
-    </div>
+    </>
   );
 }
 
