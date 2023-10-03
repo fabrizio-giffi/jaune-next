@@ -22,7 +22,6 @@ function ArtForm({ art }) {
   const [postCardPrice, setPostCardPrice] = useState(0);
 
   const [apiResponse, setApiResponse] = useState({});
-  const [showDelete, setShowDelete] = useState(false);
 
   const apiPath = "http://localhost:5005/api";
 
@@ -78,6 +77,8 @@ function ArtForm({ art }) {
     }
   };
 
+
+  // *** This function will create or edit an entry on the DB with the data submitted through the form ***
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -118,6 +119,8 @@ function ArtForm({ art }) {
     }
   };
 
+
+  // *** This function will trigger a confirm on the browser and on confirmation will delete the entry with given id ***
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete the item?")) {
       try {
